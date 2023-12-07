@@ -1,0 +1,81 @@
+0, England, USA
+0, England, Netherlands
+0, England, Australia
+1, England, Airport, 700, message
+1, England, Museum, 40, clue 1
+1, England, Library, 60, clue 2
+0, Australia, Brazil
+0, Australia, England
+0, Australia, Germany
+1, Australia, Airport, 800, message
+1, Australia, Gym, 20, clue 1
+1, Australia, Exchange, clue 2
+0, Brazil, Australia
+0, Brazil, China
+0, Brazil, Japan
+1, Brazil, Airport, 600, message
+1, Brazil, Zoo, 30, clue 1
+1, Brazil, Culinary School, 60, clue 2
+0, China, Suriname
+0, China, Brazil
+0, China, Canada
+1, China, Airport, 300, message
+1, China, Botanic Garden, 20, clue 1
+1, China, Hunting Club, 20, 40, clue 2
+0, Canada, China
+0, Canada, Belgium
+0, Canada, Mexico
+1, Canada, Liquor Store, 10, message
+1, Canada, Airport, 10, clue 1
+1, Canada, Food Truck, 40, clue 2
+0, Mexico, Portugal
+0, Mexico, Spain
+0, Mexico, Canada
+1, Mexico, Airport, 300, message
+1, Mexico, Language School, 50, clue 1
+1, Mexico, Sommelier School, 30, clue 2
+0, Portugal, Tunisia
+0, Portugal, Norway
+0, Portugal, Mexico
+1, Portugal, Airport, 300, message
+1, Portugal, Travel Agency, 60, clue 1
+1, Portugal, Sport Clu, 20, clue 2
+0, Netherlands, England
+0, Netherlands, Germany
+0, Netherlands, Australia
+1, Netherlands, Airport
+        netherlands.addDestination(england);
+        netherlands.addDestination(germany);
+        netherlands.addDestination(australia);
+
+        germany.addDestination(england);
+        germany.addDestination(usa);
+        germany.addDestination(netherlands);
+
+        japan.addDestination(england);
+        japan.addDestination(usa);
+        japan.addDestination(netherlands);
+
+        suriname.addDestination(japan);
+        suriname.addDestination(china);
+        suriname.addDestination(brazil);
+
+        belgium.addDestination(canada);
+        belgium.addDestination(suriname);
+        belgium.addDestination(china);
+
+        spain.addDestination(mexico);
+        spain.addDestination(belgium);
+        spain.addDestination(suriname);
+
+        tunisia.addDestination(mexico);
+        tunisia.addDestination(spain);
+        tunisia.addDestination(portugal);
+
+        norway.addDestination(england);
+        norway.addDestination(canada);
+        norway.addDestination(portugal);
+
+        usa.addDestination(germany);
+        usa.addDestination(england);
+        usa.addDestination(australia);

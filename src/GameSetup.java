@@ -1,5 +1,6 @@
 import javax.swing.*;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
 
 public class GameSetup {
 
@@ -20,40 +21,78 @@ public class GameSetup {
 
     public Country createStartSetup() {
         // --------- create countries and locations you can visit per country
-        Location bank = new Location("Bank", "Welcome to the bank! I'm sorry, but no one suspect was here and nothing suspected has happened.", 60);
-        Location cityHall = new Location("City Hall", "Welcome to the City Hall! I'm sorry, but no one suspect was here and nothing suspected has happened.", 50);
+        List<List<String>> records = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new File("Story1.csv"))) {
+            while (scanner.hasNextLine()) {
+                records.add(getRecordFromLine(scanner.nextLine()));
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
-        Country england = new Country("England", 700);
-        england.addLocation(new Location("Museum", "Welcome to the Museum! One of the employees has reported to seen the suspected. They say it is a white woman with green eyes.", 40));
-        england.addLocation(new Location("Library", "Welcome to the Library! A suspicious woman was here, and she asked for books about spiders.", 60));
+        Map<String, Country> countries = new HashMap<>();
+        for (List<String> row : records) {
+            // parsing countries
+            if (row.get(0).equals("1")) {
+                String rowCounry = row.get(1);
+                if (countries.get(rowCounry) != null) {
+                    Location l = new Location(row.get(1), row.get(2));
+                    Country c = countries.get(rowCounry);
+                    c.addLocation(l);
+                } else {
+                    Country c = new Country(rowCounry, row.get(2));
+                    countries.put(rowCounry, c);
+                }
+            }
+        }
+
+        for (List<String> row : records) {
+            // parsing countries
+            if (row.get(0).equals("0")) {
+                String rowCounry = row.get(1);
+                if (countries.get(rowCounry) != null) {
+                    Country c = countries.get(rowCounry);
+                    String desCounry = row.get(2);
+                    c.addDestination(countries.get(desCounry));
+                }
+            }
+        }
+
+
+        Location bank = new Location("Bank", 60);
+        Location cityHall = new Location("City Hall",50);
+
+        Country england = new Country("England",700);
+        england.addLocation(new Location("Museum",40));
+        england.addLocation(new Location("Library",60));
 
         Country australia = new Country("Australia", 800);
-        australia.addLocation(new Location("Gym", "Welcome to the Gym! A woman matching the descriptions was here and she asked about capoeira classes. She had something in her right arm, I couldn't see if it was a scar or a tattoo.", 20));
-        australia.addLocation(new Location("Exchange", "Welcome to the Exchange! A suspicious woman was here. She wanted to exchange money for reais. She had nice green eyes.", 40));
+        australia.addLocation(new Location("Gym", 20));
+        australia.addLocation(new Location("Exchange", 40));
 
         Country brazil = new Country("Brazil", 600);
-        brazil.addLocation(new Location("Zoo", "Welcome to the Zoo!  A suspicious woman was here, she was very interested in the Pandas. She mentioned that her favorite animal was a tiger.", 30));
-        brazil.addLocation(new Location("Culinary School", "Welcome to the Culinary School! A suspicious woman was here, she has dark hair and was asking about how to ask Kung Pao Chicken. Airport", 60));
+        brazil.addLocation(new Location("Zoo", 30));
+        brazil.addLocation(new Location("Culinary School", 60));
 
         Country china = new Country("China",300);
-        china.addLocation(new Location("Botanic Garden", "Welcome to the Botanic Garden! A suspicious woman was here asking about how to care for Maple trees.", 20));
-        china.addLocation(new Location("Hunting Club", "Welcome to the Hunting Club! A suspicious woman was asking about the best time to hunt Moosey.", 40));
+        china.addLocation(new Location("Botanic Garden", 20));
+        china.addLocation(new Location("Hunting Club", 40));
 
         Country canada = new Country("Canada",400);
-        canada.addLocation(new Location("Liquor Store", "Welcome to the Liquor Store! A suspicious woman was here and she mentioned that she loves Tequila.", 10));
-        canada.addLocation(new Location("Food Truck", "Welcome to the Food Truck. A suspicious woman was here and she mentioned that she loves tacos.", 40));
+        canada.addLocation(new Location("Liquor Store", 10));
+        canada.addLocation(new Location("Food Truck", 40));
 
         Country mexico = new Country("Mexico",300);
-        mexico.addLocation(new Location("Language School", "Welcome to the Language School! A suspicious woman was here and she wnated to learn a Latin language, I believe it was Portuguese.", 50));
-        mexico.addLocation(new Location("Sommelier School", "Welcome to the Sommelier School! A suspicious woman was here, and she wanted information about green wine.", 30));
+        mexico.addLocation(new Location("Language School", 50));
+        mexico.addLocation(new Location("Sommelier School", 30));
 
         Country portugal = new Country("Portugal",300);
-        portugal.addLocation(new Location("Travel Agency", "Welcome to the Travel Agency! A suspicious woman was here. She wanted information about best times to see Aurora Borealis. She mentioned that she liked spicy food.", 60));
-        portugal.addLocation(new Location("Sport Club", "Welcome to the Sport Club! A suspicious woman was here and she wanted to learn how to skii.", 20));
+        portugal.addLocation(new Location("Travel Agency", 60));
+        portugal.addLocation(new Location("Sport Club", 20));
 
         Country norway = new Country("Norway",200);
-        norway.addLocation(new Location("Ice Bar", "Welcome to the Ice Bar! A suspicious woman was here, she had distinct red lips",40));
-        norway.addLocation(new Location("Interpol", "Welcome back! The Suspect was seeing nearby. Can you name which one of Carmen Sandiego's gang members has the stolen crown?", 10));
+        norway.addLocation(new Location("Ice Bar",40));
+        norway.addLocation(new Location("Interpol", 10));
 
         Country netherlands = new Country("Netherlands",800);
         netherlands.addLocation(bank);
@@ -167,5 +206,16 @@ public class GameSetup {
         }
 
         JOptionPane.showMessageDialog(null, suspectsInfo.toString());
+    }
+
+    private List<String> getRecordFromLine(String line) {
+        List<String> values = new ArrayList<String>();
+        try (Scanner rowScanner = new Scanner(line)) {
+            rowScanner.useDelimiter(",");
+            while (rowScanner.hasNext()) {
+                values.add(rowScanner.next());
+            }
+        }
+        return values;
     }
 }
